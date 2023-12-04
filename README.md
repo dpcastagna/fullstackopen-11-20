@@ -1,6 +1,8 @@
-Front
-https://dc-puhelinluettelo.fly.dev/
+
+Front  
+https://dc-puhelinluettelo.fly.dev/  
 
 
-Backend
-https://dc-puhelinluettelo.fly.dev/api/persons
+EI TOIMI FLY:SSÄ VÄÄRÄ MONGODB_URI  
+Backend  
+https://dc-puhelinluettelo.fly.dev/api/persons  
