@@ -1,3 +1,8 @@
+Tarvii ".env"-tiedoston,, jossa:  
+MONGODB_URI=  
+PORT=3001  
+
+
 
 Front  
 https://dc-puhelinluettelo.fly.dev/  
