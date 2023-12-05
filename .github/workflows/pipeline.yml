@@ -1,0 +1,92 @@
+name: Deployment pipeline
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches: [master]
+    types: [opened, synchronize]
+
+jobs:
+  simple_deployment_pipeline:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.19'
+      - name: Install dependencies
+        run: npm install
+      - name: Check style
+        run: npm run eslint
+      - name: build
+        run: npm run build
+      - name: test
+        run: npm run test
+      
+      - name: e2e tests
+        uses: cypress-io/github-action@v5
+        with:
+          command: npm run test:e2e
+          start: npm run start-prod
+          wait-on: http://localhost:5000
+      - name: pipeline failure
+        if: ${{ failure() }}
+        uses: rjstone/discord-webhook-notify@v1
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_REPOSITY_OWNER:  ${{ github.repository_owner }}
+        with:
+          severity: error
+          description: commit
+          details: '${{ github.sha }} by dpc failed'
+          text: Build ${{ github.sha }} by dpc failed
+          footer: 'Severity: Error'
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+  skip-check:
+    if: ${{ !contains(join(toJson(github.event.commits.*.message)), '#skip') }}
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Checking for \#skip in commit message
+        env:
+          COMMIT_MESSAGES_STRING: ${{ join(toJson(github.event.commits.*.message)) }}
+        run: echo "$COMMIT_MESSAGES_STRING" does not contain \#skip
+  deploy_to_render:
+    needs: [skip-check, simple_deployment_pipeline]
+    if: ${{ github.event_name == 'push' && !contains(join(toJson(github.event.commits.*.message)), '#skip') }}
+    name: Deploy to Render
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Trigger render.com deployment
+        run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
+      - name: Deploy success
+        if: ${{ success() }}
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          severity: info
+          description: commit
+          details: '${{ github.sha }} by ${{ github.repository_owner }} failed'
+          text: Build ${{ github.sha }} by ${{ github.repository_owner }} deployed to render
+          footer: 'Severity: Error'
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+  tag_release:
+    needs: [skip-check, deploy_to_render]
+    if: ${{ !contains(join(toJson(github.event.commits.*.message)), '#skip') }}
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      # - uses: actions/setup-node@v3
+      #   with:
+      #     node-version: '16.19'
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@a2c70ae13a881faf2b4953baaa9e49731997ab36
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
+          INITIAL_VERSION: 0.0.0
+          # FETCH_ALL_TAGS: true
+          # DEFAULT_BRANCH: master
