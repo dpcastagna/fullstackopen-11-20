@@ -6,18 +6,19 @@ const app = express()
 const Person = require('./models/person')
 
 const requestLogger = (request, response, next) => {
+  // eslint-disable-next-line no-console
   console.log('Method:', request.method)
-  console.log('Path:  ', request.path)
-  console.log('Body:  ', request.body)
-  console.log('---')
+  console.log('Path:  ', request.path) // eslint-disable-line no-console
+  console.log('Body:  ', request.body) // eslint-disable-line no-console
+  console.log('---') // eslint-disable-line no-console
   next()
 }
 
-app.use(express.static('build'))
+app.use(express.static('dist'))
 app.use(express.json())
 app.use(cors())
 app.use(requestLogger)
-morgan.token('body', function (req, res) { return JSON.stringify(req.body) })
+morgan.token('body', function (req, res) { return JSON.stringify(req.body) }) // eslint-disable-line no-unused-vars
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 
@@ -49,7 +50,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
-    .then(result => {
+    .then(result => { // eslint-disable-line no-unused-vars
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -106,7 +107,7 @@ const unknownEndpoint = (request, response) => {
 app.use(unknownEndpoint)
 
 const errorHandler = (error, request, response, next) => {
-  console.error(error.message)
+  console.error(error.message) // eslint-disable-line no-console
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
@@ -122,5 +123,5 @@ app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+  console.log(`Server running on port ${PORT}`) // eslint-disable-line no-console
 })

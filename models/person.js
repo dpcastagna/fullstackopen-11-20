@@ -2,13 +2,13 @@ const mongoose = require('mongoose')
 
 const url = process.env.MONGODB_URI
 
-console.log('connecting to', url)
+console.log('connecting to', url) // eslint-disable-line no-console
 mongoose.connect(url)
-  .then(result => {
-    console.log('connected to MongoDB')
+  .then(result => { // eslint-disable-line no-unused-vars
+    console.log('connected to MongoDB') // eslint-disable-line no-console
   })
   .catch((error) => {
-    console.log('error connecting to MongoDB:', error.message)
+    console.log('error connecting to MongoDB:', error.message) // eslint-disable-line no-console
   })
 
 const personSchema = new mongoose.Schema({
