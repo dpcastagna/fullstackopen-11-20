@@ -11,18 +11,18 @@ const Filter = (props) => {
   )
 }
 
-const PersonForm = (props) => {
+export const PersonForm = (props) => {
   return(
     <div>
       <form onSubmit={props.submit}>
         <div>
-          name: <input value={props.name} onChange={props.handleName} />
+          name: <input value={props.name} id="nameInput" onChange={props.handleName} placeholder="new person" />
         </div>
         <div>
-          number: <input value={props.number} onChange={props.handleNumber} />
+          number: <input value={props.number} id="numberInput" onChange={props.handleNumber} placeholder="new number" />
         </div>
         <div>
-          <button type="submit">add</button>
+          <button id="addButton" type="submit">add</button>
         </div>
       </form>
     </div>
