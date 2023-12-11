@@ -30,7 +30,7 @@ jobs:
         with:
           command: npm run test:e2e
           start: npm run start-prod
-          wait-on: http://localhost:5000
+          wait-on: http://localhost:3001
       - name: pipeline failure
         if: ${{ failure() }}
         uses: rjstone/discord-webhook-notify@v1
