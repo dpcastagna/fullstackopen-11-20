@@ -30,6 +30,10 @@ app.get('/info', (request, response) => {
   })
 })
 
+app.get('/health', (req, res) => {
+  res.send('ok')
+})
+
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(persons => {
     response.json(persons)
