@@ -70,8 +70,8 @@ jobs:
         with:
           severity: info
           description: commit
-          details: '${{ github.sha }} by ${{ github.repository_owner }} failed'
-          text: Build ${{ github.sha }} by ${{ github.repository_owner }} deployed to render
+          details: '${{ github.sha }} by dpc deployed to render'
+          text: Build ${{ github.sha }} by dpc deployed to render
           footer: 'Severity: Error'
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
   tag_release:
