@@ -14,9 +14,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
-        env:
-          MONGODB_URI: ${{ secrets.MONGODB_URI }}
-          PORT: ${{ secrets.PORT }}
         with:
           node-version: '16.19'
       - name: Install dependencies
@@ -30,6 +27,9 @@ jobs:
       
       - name: e2e tests
         uses: cypress-io/github-action@v5
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          PORT: ${{ secrets.PORT }}
         with:
           command: npm run test:e2e
           start: npm run start-prod
