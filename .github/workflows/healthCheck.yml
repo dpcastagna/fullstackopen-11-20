@@ -11,7 +11,7 @@ jobs:
         uses: jtalk/url-health-check-action@v3
         with:
           # Check the following URLs one by one sequentially
-          url: https://dc-fso-11-20.onrender.com/health #https://example.com|http://example.com
+          url: ${{ secrets.RENDER_URL_HEALTH }} #https://example.com|http://example.com
           # Follow redirects, or just report success on 3xx status codes
           # follow-redirect: false # Optional, defaults to "false"
           # Fail this action after this many failed attempts
@@ -28,7 +28,23 @@ jobs:
           # basic-auth: "login:password" # Optional, default is empty
       - name: Health check success
         if: ${{ success() }}
-        run: echo Health check successful
+        # run: echo Health check successful
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          severity: info
+          description: commit
+          details: '${{ secrets.RENDER_URL }} is healthy'
+          text: ${{ secrets.RENDER_URL }} is healthy
+          footer: 'Severity: Error'
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Health check failure
         if: ${{ failure() }}
-        run: echo Health check failed
+        # run: echo Health check failed
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          severity: info
+          description: commit
+          details: '${{ secrets.RENDER_URL }} is down'
+          text: ${{ secrets.RENDER_URL }} is down
+          footer: 'Severity: Error'
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}

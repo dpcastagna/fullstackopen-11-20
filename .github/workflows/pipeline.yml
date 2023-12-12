@@ -43,8 +43,8 @@ jobs:
         with:
           severity: error
           description: commit
-          details: '${{ github.sha }} by dpc failed'
-          text: Build ${{ github.sha }} by dpc failed
+          details: '${{ github.sha }} by dc failed'
+          text: Build ${{ github.sha }} by dc failed
           footer: 'Severity: Error'
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
   skip-check:
@@ -70,8 +70,8 @@ jobs:
         with:
           severity: info
           description: commit
-          details: '${{ github.sha }} by dpc deployed to render'
-          text: Build ${{ github.sha }} by dpc deployed to render
+          details: '${{ github.sha }} by dc deployed to ${{ secrets.RENDER_URL }}'
+          text: Build ${{ github.sha }} by dc deployed to ${{ secrets.RENDER_URL }}
           footer: 'Severity: Error'
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
   tag_release:
