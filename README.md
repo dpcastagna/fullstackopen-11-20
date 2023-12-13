@@ -1,3 +1,6 @@
+#Fullstackopen part 11
+Exercises 11.01-11.19: https://github.com/dpcastagna/full-stack-open-pokedex  
+  
 Start by running "npm install" inside the project folder  
   
 "npm start" to run the webpack dev server  
@@ -16,14 +19,4 @@ PORT=3001
 Render frontend:  
 https://dc-fso-11-20.onrender.com/  
 Render Backend:  
-https://dc-fso-11-20.onrender.com/api/persons  
-  
-  
-  
-  
-Front  
-https://dc-puhelinluettelo.fly.dev/  
-
-EI TOIMI, FLY:SSÄ VÄÄRÄ MONGODB_URI  
-Backend  
-https://dc-puhelinluettelo.fly.dev/api/persons  
+https://dc-fso-11-20.onrender.com/api/persons
